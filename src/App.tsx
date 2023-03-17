@@ -93,6 +93,18 @@ export default function App() {
     }
   };
 
+  const disconnectWallet = async () => {
+    if(provider && walletKey){
+      try {
+        await provider.disconnect();
+        await setWalletKey(undefined);
+      } catch (err) {
+        // { code: 4001, message: 'User rejected the request.' }
+        console.log(err);
+      }
+    }
+  }
+
   // HTML code for the app
   return (
     <div className="App">
@@ -112,7 +124,19 @@ export default function App() {
           </button>
         )}
         {provider && walletKey && <p>{`Connected account: ${walletKey}`}</p>}
-
+        {provider && walletKey && (
+          <button
+            style={{
+              fontSize: "16px",
+              padding: "15px",
+              fontWeight: "bold",
+              borderRadius: "5px",
+            }}
+            onClick={disconnectWallet}
+          >
+            Disconnect Wallet
+          </button>
+        )}
         {!provider && (
           <p>
             No provider found. Install{" "}
